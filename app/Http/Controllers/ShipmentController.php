@@ -30,7 +30,6 @@ class ShipmentController extends Controller
         $data['c_id'] = Company::where('name', $data['company'])->first()->id;
         unset($data['company']);
         $shipment = Shipment::create($data);
-        $payment = Shipment::where('c_id', $shipment->id)->first();
         return redirect()->route('companies.show', ['company' => $shipment->company()->first()->id]);
     }
 
