@@ -2,6 +2,11 @@
 @section('content')
     <div style="margin: 7% 10%; border: #1a202c">
         <h1>Список договоров</h1>
+        @if(session('message'))
+            <div class="text-success">
+                <h4>{{ session('message') }}</h4>
+            </div>
+        @endif
         <table class="table table-striped table-bordered table-dark">
             <thead>
             <tr>

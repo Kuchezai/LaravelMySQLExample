@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AgreementPaymentEditRequest;
+use App\Http\Requests\AgreementStoreRequest;
 use App\Models\Agreement;
 use App\Models\Company;
 use App\Models\Payment;
 use App\Models\Shipment;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AgreementController extends Controller
@@ -23,21 +24,17 @@ class AgreementController extends Controller
     {
         //$shipments = DB::select('SELECT * FROM shipments');
         //$companies = DB::select('SELECT * FROM companies');
+
         $shipments = Shipment::all();     //!!!Eloquent
         $companies = Company::all();     //!!!Eloquent
+
         return view('agreements/create', ['companies' => $companies, 'shipments' => $shipments]);
     }
 
-    public function store(Request $request)
+    public function store(AgreementStoreRequest $request)
     {
-        // здесь всё через Eloquent, чтобы легче организовать переходы и проверки
-        $data = $request->validate([
-            'b_id' => 'string|required',
-            's_id' => 'string|required',
-            'amount' => 'integer|required',
-            'sh_id' => 'string|required',
-            'complete_by' => 'string|required',
-        ]);
+        // здесь всё через Eloquent
+        $data = $request->validated();
         $data['b_id'] = Company::where('name', $data['b_id'])->first()->id;
         $data['s_id'] = Company::where('name', $data['s_id'])->first()->id;
 
@@ -45,27 +42,24 @@ class AgreementController extends Controller
         foreach ($agreements_seller as $agreements) {
             if ($agreements->shipment()->first()->id == $data['sh_id'])
                 if ($agreements->payment()->first()->status == 0)
-                    return redirect()->back(); //товар уже есть в незавершенном договоре
+                    return redirect()->back()->withErrors(['message' => 'Товар уже есть в незавершенном договоре!']);
         }
 
 
         if ((Shipment::where('id', $data['sh_id'])->first()->company()->first()->id == $data['s_id'])) {
             $agreement = Agreement::create($data);
         } else {
-            return redirect()->back(); //товар не принадлежит выбранному продавцу
+            return redirect()->back()->withErrors(['message' => 'Товар не принадлежит выбранному продавцу!']);
         }
-
 
         return redirect()->route('companies.show', ['company' => $agreement->seller()->first()->id]);
     }
 
-    public function paymentEdit(Request $request)
+    public function paymentEdit(AgreementPaymentEditRequest $request)
     {
-        $data = $request->validate([
-            'a_id' => 'string|required',
-        ]);
+        $data = $request->validated();
         Payment::where('a_id', $data['a_id'])->update(['status' => true]);
 
-        return redirect()->back();
+        return redirect()->back()->with('message', 'Статус оплаты изменен!');
     }
 }

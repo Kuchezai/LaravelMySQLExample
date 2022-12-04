@@ -2,6 +2,11 @@
 @section('content')
     <div style="margin: 10% 35%; border: #1a202c">
         <h1>Создать договор</h1>
+        @if($errors->any())
+            <div class="text-danger">
+                <h4>{{$errors->first()}}</h4>
+            </div>
+        @endif
         <form method="POST" action="{{route('agreements.store')}}">
             @csrf
             <div class="form-group mt-3 mb-2">
