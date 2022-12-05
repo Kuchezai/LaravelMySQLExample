@@ -41,6 +41,9 @@
             @endforeach
             </tbody>
         </table>
+        <div>
+            {{$agreements->links()}}
+        </div>
         <button type="button" class="btn btn-dark" id='modal-btn' data-bs-toggle="modal"
                 data-bs-target="#myModal">Подтвердить оплату
         </button>

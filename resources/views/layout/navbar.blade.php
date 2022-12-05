@@ -7,7 +7,7 @@
 <div style="min-height:calc(100vh - 56px);">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Обувные договора</a>
+            <a class="navbar-brand" href="{{route("companies.index")}}">Обувные договора</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -53,6 +53,17 @@
 
     A:active {
         color: rgba(255, 255, 255, 0.59); /* Цвет активных ссылок */
+    }
+     .page-item.active .page-link {
+         z-index: 1;
+         color: white;
+         background-color: #1d2023;
+         border-color: #1d2023;
+     }
+    .page-item .page-link {
+        color: #fff;
+        background-color: #282b31;
+        border-color: #282b31;
     }
 </style>
 @yield('content')

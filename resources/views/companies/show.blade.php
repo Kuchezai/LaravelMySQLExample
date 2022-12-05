@@ -23,7 +23,9 @@
             @endforeach
             </tbody>
         </table>
-
+            <div>
+                {{$shipments->links()}}
+            </div>
         <table class="table table-striped table-bordered table-dark">
             <caption>Список договоров компании {{$com->name}}</caption>
             <thead>

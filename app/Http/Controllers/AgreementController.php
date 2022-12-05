@@ -15,7 +15,7 @@ class AgreementController extends Controller
     public function index()
     {
         //$agreements = DB::select('SELECT * FROM agreements');
-        $agreements = Agreement::all();     //!!!Eloquent
+        $agreements = Agreement::paginate(15);     //!!!Eloquent
 
         return view('agreements/index', ['agreements' => $agreements]);
     }
@@ -37,6 +37,10 @@ class AgreementController extends Controller
         $data = $request->validated();
         $data['b_id'] = Company::where('name', $data['b_id'])->first()->id;
         $data['s_id'] = Company::where('name', $data['s_id'])->first()->id;
+
+        if($data['b_id'] == $data['s_id']){
+            return redirect()->back()->withErrors(['message' => 'Для заключение договора требуется 2 компании!']);
+        }
 
         $agreements_seller = Agreement::where('s_id', $data['s_id'])->get();
         foreach ($agreements_seller as $agreements) {

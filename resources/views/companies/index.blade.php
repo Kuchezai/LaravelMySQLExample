@@ -21,8 +21,13 @@
                 </tr>
             @endforeach
             </tbody>
-
         </table>
+        <div>
+            {{$companies->links()}}
+        </div>
     </div>
+
+
 @endsection
+
 

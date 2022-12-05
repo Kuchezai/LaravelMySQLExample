@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('shipments', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 35);
+            $table->string('name', 55);
             $table->string('description', 55);
             $table->unsignedBigInteger('c_id');
             $table->foreign('c_id')->references('id')->on('companies');
