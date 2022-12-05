@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\BelongsToSeller;
+use App\Rules\IdNotEqualToId;
+use App\Rules\NotYetInSellersAgreements;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AgreementStoreRequest extends FormRequest
@@ -24,11 +27,11 @@ class AgreementStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'b_id' => 'string|required',
-            's_id' => 'string|required',
             'amount' => 'integer|required',
-            'sh_id' => 'string|required',
+            'b_name' => 'string|required',
             'complete_by' => 'string|required',
+            's_name' => ['bail','string', 'required', new IdNotEqualToId('b_name')],
+            'sh_id' => ['bail','integer', 'required', new NotYetInSellersAgreements('s_name'), new BelongsToSeller('s_name')],
         ];
     }
 }

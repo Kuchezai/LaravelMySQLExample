@@ -11,7 +11,7 @@
             @csrf
             <div class="form-group mt-3 mb-2">
                 <label for="exampleFormControlSelect1">Компания-поставщик</label>
-                <select class="form-control" id="exampleFormControlSelect1" name='s_id'>
+                <select class="form-control" id="exampleFormControlSelect1" name='s_name'>
                     @foreach ($companies as $company)
                         <option>{{$company->name}}</option>
                     @endforeach
@@ -19,7 +19,7 @@
             </div>
             <div class="form-group mb-2">
                 <label for="exampleFormControlSelect2">Компания-покупатель</label>
-                <select class="form-control" id="exampleFormControlSelect2" name='b_id'>
+                <select class="form-control" id="exampleFormControlSelect2" name='b_name'>
                     @foreach ($companies as $company)
                         <option>{{$company->name}}</option>
                     @endforeach

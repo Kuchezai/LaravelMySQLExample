@@ -25,6 +25,7 @@ class AgreementPaymentEditRequest extends FormRequest
     {
         return [
             'a_id' => 'string|required',
+
         ];
     }
 }

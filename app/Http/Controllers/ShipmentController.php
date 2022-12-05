@@ -7,6 +7,7 @@ use App\Http\Requests\ShipmentStoreRequest;
 use App\Models\Agreement;
 use App\Models\Company;
 use App\Models\Shipment;
+use App\Services\FindCompaniesByName;
 use Illuminate\Support\Facades\DB;
 
 class ShipmentController extends Controller
@@ -21,14 +22,9 @@ class ShipmentController extends Controller
 
     public function store(ShipmentStoreRequest $request)
     {
-
         $data = $request->validated();
 
-        //$c_id = DB::select('SELECT id FROM companies WHERE name = ? LIMIT 1',[$data['company']]);
-        //DB::insert('INSERT INTO shipments (name, description, c_id)  VALUES (?,?,?)', [$data['name'], $data['description'], $c_id]);
-
-        $data['c_id'] = Company::where('name', $data['company'])->first()->id;
-        unset($data['company']);
+        $data = FindCompaniesByName::shipments($data);
         $shipment = Shipment::create($data);
 
         return redirect()->route('companies.show', ['company' => $shipment->company()->first()->id]);
@@ -40,6 +36,7 @@ class ShipmentController extends Controller
 
         DB::unprepared('call isDone(' . $data["a_id"] . ');');
         //can be sql-injection
+
         $new_company = Agreement::find($data["a_id"])->b_id;
 
         return redirect()->route('companies.show', ['company' => $new_company]);

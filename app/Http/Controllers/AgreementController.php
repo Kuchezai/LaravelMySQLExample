@@ -8,6 +8,7 @@ use App\Models\Agreement;
 use App\Models\Company;
 use App\Models\Payment;
 use App\Models\Shipment;
+use App\Services\FindCompaniesByName;
 use Illuminate\Support\Facades\DB;
 
 class AgreementController extends Controller
@@ -35,27 +36,9 @@ class AgreementController extends Controller
     {
         // здесь всё через Eloquent
         $data = $request->validated();
-        $data['b_id'] = Company::where('name', $data['b_id'])->first()->id;
-        $data['s_id'] = Company::where('name', $data['s_id'])->first()->id;
+        $data = FindCompaniesByName::agreements($data);
 
-        if($data['b_id'] == $data['s_id']){
-            return redirect()->back()->withErrors(['message' => 'Для заключение договора требуется 2 компании!']);
-        }
-
-        $agreements_seller = Agreement::where('s_id', $data['s_id'])->get();
-        foreach ($agreements_seller as $agreements) {
-            if ($agreements->shipment()->first()->id == $data['sh_id'])
-                if ($agreements->payment()->first()->status == 0)
-                    return redirect()->back()->withErrors(['message' => 'Товар уже есть в незавершенном договоре!']);
-        }
-
-
-        if ((Shipment::where('id', $data['sh_id'])->first()->company()->first()->id == $data['s_id'])) {
-            $agreement = Agreement::create($data);
-        } else {
-            return redirect()->back()->withErrors(['message' => 'Товар не принадлежит выбранному продавцу!']);
-        }
-
+        $agreement = Agreement::create($data);
         return redirect()->route('companies.show', ['company' => $agreement->seller()->first()->id]);
     }
 
