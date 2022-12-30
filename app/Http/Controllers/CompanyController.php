@@ -28,14 +28,14 @@ class CompanyController extends Controller
     {
         $c_id = $company;
 
-        $company = DB::select('SELECT * FROM companies WHERE id = ?', [$c_id]);
-        //$company = Company::where('id', $company)->get();;     //!!!Eloquent
+        //$company = DB::select('SELECT * FROM companies WHERE id = ?', [$c_id]);
+        $company = Company::where('id', $company)->get();     //!!!Eloquent
 
         //$shipments = DB::select('SELECT shipments.* FROM companies, shipments  WHERE companies.id = ? AND companies.id = shipments.c_id', [$c_id]);
-        $shipments = Company::find($c_id)->shipments()->paginate(15);     //!!!Eloquent
+        $shipments = Company::findOrFail($c_id)->shipments()->paginate(15);     //!!!Eloquent
 
         //$agreements = DB::select('SELECT agreements.* FROM agreements WHERE (s_id = ? or b_id = ?)', [$c_id, $c_id]);
-        $agreements = Company::find($c_id)->asSeller()->get()->merge(Company::find($c_id)->asBuyer()->get());  //!!!Eloquent
+        $agreements = Company::findOrFail($c_id)->asSeller()->get()->merge(Company::find($c_id)->asBuyer()->get());  //!!!Eloquent
 
         return view('companies/show', ['company' => $company, 'shipments' => $shipments, 'agreements' => $agreements]);
     }
