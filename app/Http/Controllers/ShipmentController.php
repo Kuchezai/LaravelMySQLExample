@@ -7,7 +7,7 @@ use App\Http\Requests\ShipmentStoreRequest;
 use App\Models\Agreement;
 use App\Models\Company;
 use App\Models\Shipment;
-use App\Services\FindCompaniesByName;
+use App\Services\FindCompaniesIDByName;
 use Illuminate\Support\Facades\DB;
 
 class ShipmentController extends Controller
@@ -24,7 +24,7 @@ class ShipmentController extends Controller
     {
         $data = $request->validated();
 
-        $data = FindCompaniesByName::shipments($data);
+        $data = FindCompaniesIDByName::shipments($data);
         $shipment = Shipment::create($data);
 
         return redirect()->route('companies.show', ['company' => $shipment->company()->first()->id]);

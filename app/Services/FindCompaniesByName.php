@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Company;
 
-class FindCompaniesByName
+class FindCompaniesIDByName
 {
     public static function agreements($data) :array{
         $data['b_id'] = Company::where('name', $data['b_name'])->first()->id;

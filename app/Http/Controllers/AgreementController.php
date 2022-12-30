@@ -8,8 +8,8 @@ use App\Models\Agreement;
 use App\Models\Company;
 use App\Models\Payment;
 use App\Models\Shipment;
-use App\Services\FindCompaniesByName;
-use Illuminate\Support\Facades\DB;
+use App\Services\FindCompaniesIDByName;
+
 
 class AgreementController extends Controller
 {
@@ -36,7 +36,7 @@ class AgreementController extends Controller
     {
         // здесь всё через Eloquent
         $data = $request->validated();
-        $data = FindCompaniesByName::agreements($data);
+        $data = FindCompaniesIDByName::agreements($data);
 
         $agreement = Agreement::create($data);
         return redirect()->route('companies.show', ['company' => $agreement->seller()->first()->id]);
